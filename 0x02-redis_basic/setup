@@ -1,0 +1,25 @@
+#!/bin/bash
+ echo "Setting up Redis deployment environment...."
+
+ #Build the Docker image
+echo " Building docker image for Redis"
+docker build -t redis-dev .
+
+if [ $? -eq 0 ]; then
+    echo "Docker image built successfully..."
+
+    # Run the Docker conatiner with volume mounting for persistent code
+    echo "Starting development container for Redis..."
+    echo " Your code will be in /app/0x02-redis_basic inside the container"
+    echo " Any changes that will be made will persist in the host machine"
+    echo ""
+
+    docker run -it \
+        --name redis-dev \
+        -v $(pwd):/app/0x02-redis_basic \
+        --rm \
+        redis-dev
+else
+    echo "Failed to build Docker image. Exiting..."
+    exit 1
+fi
